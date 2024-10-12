@@ -6,7 +6,23 @@
     <title>Document</title>
 </head>
 <body>
-    
+
+    <div class="rps-ui">
+        <h1>Make your choice:</h1>
+        <div class="rps-ui-buttons">
+            <button id="rock">Rock</button>
+            <button id="paper">Paper</button>
+            <button id="scissors">Scissors</button>
+        </div>
+    </div>
+    <div class="rps-ui-score">
+        <div class="rps-ui-score-log">
+            <ul>
+
+            </ul>
+        </div>
+    </div>
+
     <script>
         function getComputerChoice() {
             const choice = Math.floor(Math.random() * 3);
@@ -19,89 +35,90 @@
             else { return "scissors"; } // 0
         }
 
-        console.log(getComputerChoice());
+        // select human choice with buttons
+        let rpsButtons = document.querySelectorAll("button");
+        rpsButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                playRound(button.id, getComputerChoice());
+            });
+        });
 
-        function getHumanChoice() {
-            let choice = prompt("Choose rock, paper, or scissors:");
-            choice = choice.toLowerCase();
-            if (choice === "rock" || choice === "paper" || choice === "scissors") { return choice; }
-            else {
-                alert("Invalid choice. Choosing paper for you...");
-                return "paper";
-            }
-        }
 
-        function playGame(rounds) {
-            let humanScore = computerScore = 0;
+        let scoreLimit = 5;
+        let humanScore = computerScore = 0;
 
-            for (let i = 0; i < rounds; i++) {
-                let roundComputerChoice = getComputerChoice();
-                let roundHumanChoice = getHumanChoice();
+        const rpsScoreDiv = document.querySelector(".rps-ui-score");
+        let rpsScore = document.createElement("p");
+        rpsScore.textContent = `Human: ${humanScore} | Computer: ${computerScore}`;
+        rpsScoreDiv.appendChild(rpsScore);
 
-                function playRound(humanChoice, computerChoice) {
-                    const r = "Rock";
-                    const p = "Paper";
-                    const s = "Scissors";
-                    if (humanChoice === r.toLowerCase()) {
-                        if (computerChoice === r.toLowerCase()) { 
-                            console.log(`Tie with ${r}`);
-                        }
-                        else if (computerChoice === p.toLowerCase()) {
-                            console.log(`You Lose! ${p} beats ${r}`);
-                            computerScore++;
-                        }
-                        else {
-                            console.log(`You Win! ${r} beats ${s}`);
-                            humanScore++;
-                        }
-                    }
-                    else if (humanChoice === p.toLowerCase()) {
-                        if (computerChoice === r.toLowerCase()) { 
-                            console.log(`You Win! ${r} beats ${p}`);
-                            humanScore++;
-                            
-                        }
-                        else if (computerChoice === p.toLowerCase()) {
-                            console.log(`Tie with ${p}`);
-                        }
-                        else {
-                            console.log(`You Lose! ${s} beats ${p}`);
-                            computerScore++;
-                        }
-                    }
-                    else if (humanChoice === s.toLowerCase()){
-                        if (computerChoice === r.toLowerCase()) { 
-                            console.log(`You Lose! ${r} beats ${s}`);
-                            computerScore++;
-                            
-                        }
-                        else if (computerChoice === p.toLowerCase()) {
-                            console.log(`You Win! ${s} beats ${p}`);
-                            humanScore++;
-                        }
-                        else {
-                            console.log(`Tie with ${s}`);
-                        }
-                    }
+        let rpsScoreLog = document.querySelector(".rps-ui-score-log ul");
+        let rpsVictory = document.createElement("p");
+        rpsVictory.textContent = "";
+
+        function playRound(humanChoice, computerChoice) {
+            const r = "Rock";
+            const p = "Paper";
+            const s = "Scissors";
+
+            let rpsCurrentRound = document.createElement("p");
+
+            if (humanChoice === r.toLowerCase()) {
+                if (computerChoice === r.toLowerCase()) { 
+                    rpsCurrentRound.textContent = `Tie with ${r}`;
                 }
-
-                playRound(roundHumanChoice, roundComputerChoice);
+                else if (computerChoice === p.toLowerCase()) {
+                    rpsCurrentRound.textContent = `You Lose! ${p} beats ${r}`;
+                    computerScore++;
+                }
+                else {
+                    rpsCurrentRound.textContent = `You Win! ${r} beats ${s}`;
+                    humanScore++;
+                }
+            }
+            else if (humanChoice === p.toLowerCase()) {
+                if (computerChoice === r.toLowerCase()) { 
+                    rpsCurrentRound.textContent = `You Win! ${r} beats ${p}`;
+                    humanScore++;
+                    
+                }
+                else if (computerChoice === p.toLowerCase()) {
+                    rpsCurrentRound.textContent = `Tie with ${p}`;
+                }
+                else {
+                    rpsCurrentRound.textContent = `You Lose! ${s} beats ${p}`;
+                    computerScore++;
+                }
+            }
+            else if (humanChoice === s.toLowerCase()){
+                if (computerChoice === r.toLowerCase()) { 
+                    rpsCurrentRound.textContent = `You Lose! ${r} beats ${s}`;
+                    computerScore++;
+                    
+                }
+                else if (computerChoice === p.toLowerCase()) {
+                    rpsCurrentRound.textContent = `You Win! ${s} beats ${p}`;
+                    humanScore++;
+                }
+                else {
+                    rpsCurrentRound.textContent = `Tie with ${s}`;
+                }
             }
 
-            console.log(`Score: ${humanScore} - ${computerScore}`);
-            if (humanScore > computerScore) {
-                console.log("Human wins!");
+            rpsScoreLog.append(rpsCurrentRound);
+
+            rpsScore.textContent = `Human: ${humanScore} | Computer: ${computerScore}`;
+            rpsScoreDiv.appendChild(rpsScore);
+
+            if (humanScore === scoreLimit) {
+                rpsVictory.textContent = "Human wins!";
             }
-            else if (humanScore < computerScore) {
-                console.log("Computer wins!");
+            else if (computerScore === scoreLimit) {
+                rpsVictory.textContent = "Computer wins!";
             }
-            else {
-                console.log("Draw!");
-            }
+
+            if (rpsVictory.textcontent !== '') { rpsScoreDiv.append(rpsVictory); }
         }
-
-        let rounds = 5;
-        playGame(rounds);
 
     </script>
 
