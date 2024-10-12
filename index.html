@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        function getComputerChoice() {
+            const choice = Math.floor(Math.random() * 3);
+            if (choice === 1) {
+                return "rock";
+            }
+            else if (choice === 2) {
+                return "paper";
+            }
+            else { return "scissors"; } // 0
+        }
+
+        console.log(getComputerChoice());
+
+        function getHumanChoice() {
+            let choice = prompt("Choose rock, paper, or scissors:");
+            choice = choice.toLowerCase();
+            if (choice === "rock" || choice === "paper" || choice === "scissors") { return choice; }
+            else {
+                alert("Invalid choice. Choosing paper for you...");
+                return "paper";
+            }
+        }
+
+        function playGame(rounds) {
+            let humanScore = computerScore = 0;
+
+            for (let i = 0; i < rounds; i++) {
+                let roundComputerChoice = getComputerChoice();
+                let roundHumanChoice = getHumanChoice();
+
+                function playRound(humanChoice, computerChoice) {
+                    const r = "Rock";
+                    const p = "Paper";
+                    const s = "Scissors";
+                    if (humanChoice === r.toLowerCase()) {
+                        if (computerChoice === r.toLowerCase()) { 
+                            console.log(`Tie with ${r}`);
+                        }
+                        else if (computerChoice === p.toLowerCase()) {
+                            console.log(`You Lose! ${p} beats ${r}`);
+                            computerScore++;
+                        }
+                        else {
+                            console.log(`You Win! ${r} beats ${s}`);
+                            humanScore++;
+                        }
+                    }
+                    else if (humanChoice === p.toLowerCase()) {
+                        if (computerChoice === r.toLowerCase()) { 
+                            console.log(`You Win! ${r} beats ${p}`);
+                            humanScore++;
+                            
+                        }
+                        else if (computerChoice === p.toLowerCase()) {
+                            console.log(`Tie with ${p}`);
+                        }
+                        else {
+                            console.log(`You Lose! ${s} beats ${p}`);
+                            computerScore++;
+                        }
+                    }
+                    else if (humanChoice === s.toLowerCase()){
+                        if (computerChoice === r.toLowerCase()) { 
+                            console.log(`You Lose! ${r} beats ${s}`);
+                            computerScore++;
+                            
+                        }
+                        else if (computerChoice === p.toLowerCase()) {
+                            console.log(`You Win! ${s} beats ${p}`);
+                            humanScore++;
+                        }
+                        else {
+                            console.log(`Tie with ${s}`);
+                        }
+                    }
+                }
+
+                playRound(roundHumanChoice, roundComputerChoice);
+            }
+
+            console.log(`Score: ${humanScore} - ${computerScore}`);
+            if (humanScore > computerScore) {
+                console.log("Human wins!");
+            }
+            else if (humanScore < computerScore) {
+                console.log("Computer wins!");
+            }
+            else {
+                console.log("Draw!");
+            }
+        }
+
+        let rounds = 5;
+        playGame(rounds);
+
+    </script>
+
+</body>
+</html>
